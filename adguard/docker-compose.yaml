@@ -1,0 +1,63 @@
+# NOTE: While AdGuard Home may be configured as a DHCP server, this is out
+#       out of scope for this docker-compose.yml file. Configuring the DHCP
+#       server requires using 'network_mode: host'. 
+#
+#       If you want to use the DHCP server feature, delete the 'network:'
+#       section (lines 20 & 21), as well as the entire 'ports:' section
+#       (lines 30 - 47). Then, just below the 'restart:' section (line 19)
+#       insert a line that reads 'network_mode: host'. The container will
+#       still reserve all the ports listed below, as well as 67 and 68 for
+#       DHCP, but there's no need to map them in the docker-compose.yml file
+#       in Host networking mode.
+#
+
+version: '3.7'
+
+services:
+  # AdGuard Home - https://github.com/AdguardTeam/AdGuardHome
+  adguardhome:
+    # If you'd like to run development builds, change 'latest' to 'edge' below.
+    image: 'adguard/adguardhome:${TAG}'
+    container_name: '${CONTAINERNAME}'
+    hostname: '${HOSTNAME}'
+    restart: '${RESTARTPOLICY}'
+    networks:
+      - 'adguard-net'
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - 'adguard-data:/opt/adguardhome/work'
+      - 'adguard-conf:/opt/adguardhome/conf'
+      # The next two lines are only necessary if you're using a custom SSL cert
+      # signed by a private CA trusted by your host machine:
+      #- '/usr/local/share/ca-certificates:/usr/local/share/ca-certificates'
+      #- '/etc/ssl/certs:/etc/ssl/certs'
+    ports:
+      # Plain DNS
+      - '53:53/tcp'
+      - '53:53/udp'
+      # AdGuard Home Admin Panel as well as DNS-over-HTTPS
+      - '80:80/tcp'
+      - '443:443/tcp'
+      - '443:443/udp'
+      - '3000:3000/tcp'
+      # DNS-over-TLS
+      - '853:853/tcp'
+      # DNS-over-QUIC
+      - '784:784/udp'
+      - '853:853/udp'
+      - '8853:8853/udp'
+      # DNSCrypt
+      - '5443:5443/tcp'
+      - '5443:5443/udp'
+
+volumes:
+  adguard-data:
+    name: 'adguard-data'
+    driver: 'local'
+  adguard-conf:
+    name: 'adguard-data'
+    driver: 'local'
+
+networks:
+  adguard-net:
+    name: 'adguard-net'
