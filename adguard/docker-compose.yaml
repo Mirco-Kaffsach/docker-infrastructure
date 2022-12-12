@@ -1,28 +1,15 @@
-# NOTE: While AdGuard Home may be configured as a DHCP server, this is out
-#       out of scope for this docker-compose.yml file. Configuring the DHCP
-#       server requires using 'network_mode: host'. 
-#
-#       If you want to use the DHCP server feature, delete the 'network:'
-#       section (lines 20 & 21), as well as the entire 'ports:' section
-#       (lines 30 - 47). Then, just below the 'restart:' section (line 19)
-#       insert a line that reads 'network_mode: host'. The container will
-#       still reserve all the ports listed below, as well as 67 and 68 for
-#       DHCP, but there's no need to map them in the docker-compose.yml file
-#       in Host networking mode.
-#
-
 version: '3.7'
 
 services:
   # AdGuard Home - https://github.com/AdguardTeam/AdGuardHome
   adguardhome:
     # If you'd like to run development builds, change 'latest' to 'edge' below.
-    image: 'adguard/adguardhome:${TAG}'
-    container_name: '${CONTAINERNAME}'
-    hostname: '${HOSTNAME}'
-    restart: '${RESTARTPOLICY}'
+    image: adguard/adguardhome:${TAG}
+    container_name: ${CONTAINERNAME}
+    hostname: ${HOSTNAME}
+    restart: ${RESTARTPOLICY}
     networks:
-      - 'adguard-net'
+      - adguard-net
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
       - 'adguard-data:/opt/adguardhome/work'
@@ -52,12 +39,12 @@ services:
 
 volumes:
   adguard-data:
-    name: 'adguard-data'
-    driver: 'local'
+    name: adguard-data
+    driver: local
   adguard-conf:
-    name: 'adguard-data'
-    driver: 'local'
+    name: adguard-data
+    driver: local
 
 networks:
   adguard-net:
-    name: 'adguard-net'
+    name: adguard-net
