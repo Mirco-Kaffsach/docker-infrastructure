@@ -6,7 +6,7 @@ networks:
 
 services:
   sonarweb:
-    image: sonarqube:latest
+    image: sonarqube:${SONARQUBE_IMAGE_VERSION}
     container_name: ${SONAR_WEB_CONTAINER_NAME}
     restart: ${RESTART_POLICY}
     networks:
@@ -16,7 +16,7 @@ services:
       - /home/docker/${SONAR_WEB_CONTAINER_NAME}/logs:/opt/sonarqube/logs
       - /home/docker/${SONAR_WEB_CONTAINER_NAME}/extensions:/opt/sonarqube/extensions
     ports:
-      - "47004:9000"
+      - "${PUBLIC_PORT_9000}:9000"
     environment:
       SONAR_JDBC_USERNAME: ${SONAR_DB_USERNAME}
       SONAR_JDBC_PASSWORD: ${SONAR_DB_USERPASSWORD}

@@ -6,7 +6,7 @@ networks:
 
 services:
   nuget:
-    image: loicsharma/baget:latest
+    image: loicsharma/baget:${BAGET_IMAGE_VERSION}
     container_name: ${NUGET_CONTAINER_NAME}
     restart: ${RESTART_POLICY}
     networks:
@@ -14,7 +14,7 @@ services:
     volumes:
       - /home/docker/${NUGET_CONTAINER_NAME}:/var/baget
     ports:
-      - "47006:80"
+      - "${PUBLIC_PORT_80}:80"
     environment:
       - ApiKey=${NUGET_API_KEY}
       - Storage__Type=FileSystem

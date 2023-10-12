@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  sea:
+    # Limits
+    cpus: 1.0
+    mem_reservation: "128M"
+    mem_limit: "1024M"
+    
+    container_name: ${CONTAINER_NAME}
+    image: datalust/seq:${SEQ_IMAGE_VERSION}
+    ports:
+      - "${PUBLIC_PORT_5341}:5341"
+      - "${PUBLIC_PORT_80}:80"
+    environment:
+      - ACCEPT_EULA=Y
+    restart: ${RESTART_POLICY}
+    volumes:
+      - /home/dockervolumes/${CONTAINER_NAME}/data:/data

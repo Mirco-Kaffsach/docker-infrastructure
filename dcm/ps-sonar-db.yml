@@ -7,13 +7,13 @@ networks:
 services:
 
   sonardb:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:${MSSQL_IMAGE_VERSION}
     container_name: ${SONAR_DB_CONTAINER_NAME}
     restart: ${RESTART_POLICY}
     networks:
       - ps-sonar
     ports:
-      - "1433:1433"
+      - "${PUBLIC_PORT_1433}:1433"
     volumes:
       - /home/docker/${SONAR_DB_CONTAINER_NAME}/mssql:/var/opt/mssql
     environment:

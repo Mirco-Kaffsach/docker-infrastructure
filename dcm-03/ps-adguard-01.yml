@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+  adguardhome:
+    # Limits
+    cpus: 1.0
+    mem_reservation: "256M"
+    mem_limit: "1024M"
+
+    image: adguard/adguardhome:${ADGUARD_IMAGE_VERSION}
+    container_name: ${CONTAINER_NAME}
+    hostname: ${HOSTNAME}
+    restart: ${RESTART_POLICY}
+    networks:
+      - adguard-net
+    healthcheck:
+      disable: true
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - '/home/dockervolumes/${CONTAINER_NAME}/data:/opt/adguardhome/work'
+      - '/home/dockervolumes/${CONTAINER_NAME}/conf:/opt/adguardhome/conf'
+      # The next two lines are only necessary if you're using a custom SSL cert
+      # signed by a private CA trusted by your host machine:
+      #- '/usr/local/share/ca-certificates:/usr/local/share/ca-certificates'
+      #- '/etc/ssl/certs:/etc/ssl/certs'
+    ports:
+      # Plain DNS
+      - '53:53/tcp'
+      - '53:53/udp'
+      # AdGuard Home Admin Panel as well as DNS-over-HTTPS
+      - '80:80/tcp'
+      - '443:443/tcp'
+      - '443:443/udp'
+      - '3000:3000/tcp'
+      # DNS-over-TLS
+      - '853:853/tcp'
+      # DNS-over-QUIC
+      - '784:784/udp'
+      - '853:853/udp'
+      - '8853:8853/udp'
+      # DNSCrypt
+      - '5443:5443/tcp'
+      - '5443:5443/udp'
+
+networks:
+  adguard-net:
+    name: adguard-net

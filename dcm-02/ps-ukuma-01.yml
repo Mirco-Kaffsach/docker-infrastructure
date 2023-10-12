@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:${UPTIMEKUMA_IMAGE_VERSION}
+    container_name: ${CONTAINER_NAME}
+    volumes:
+      - /home/dockervolumes/${CONTAINER_NAME}/data:/app/data
+    ports:
+      - ${PUBLIC_PORT_3001}:3001
+    restart: ${RESTART_POLICY}
