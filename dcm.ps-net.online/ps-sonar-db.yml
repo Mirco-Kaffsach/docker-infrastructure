@@ -1,0 +1,22 @@
+version: '3.9'
+
+networks:
+  ps-sonar:
+    external: true
+
+services:
+
+  sonardb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: ${SONAR_DB_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    networks:
+      - ps-sonar
+    ports:
+      - "1433:1433"
+    volumes:
+      - /home/docker/${SONAR_DB_CONTAINER_NAME}/mssql:/var/opt/mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${SONAR_DB_SA_PASSWORD}
+      - MSSQL_PID=Express

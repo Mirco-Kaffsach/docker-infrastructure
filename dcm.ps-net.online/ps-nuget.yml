@@ -1,0 +1,24 @@
+version: '3.9'
+
+networks:
+  ps-nuget:
+    external: true
+
+services:
+  nuget:
+    image: loicsharma/baget:latest
+    container_name: ${NUGET_CONTAINER_NAME}
+    restart: ${RESTART_POLICY}
+    networks:
+      - ps-nuget
+    volumes:
+      - /home/docker/${NUGET_CONTAINER_NAME}:/var/baget
+    ports:
+      - "47006:80"
+    environment:
+      - ApiKey=${NUGET_API_KEY}
+      - Storage__Type=FileSystem
+      - Storage__Path=/var/baget
+      - Database__Type=Sqlite
+      - Database__ConnectionString=Data Source=/var/baget/baget.db
+      - Search__Type=Database
